@@ -38,17 +38,17 @@ int main()
     int cliendSockfd = accept(sockfd, (struct sockaddr *)&clientAddr, &clientAddrLen);
     printf("Client connected!\n");
     // Send data to the client;
-    char buf[10000] = {0};
-    receiveHTTP(cliendSockfd, buf, sizeof(buf), 0);
-    printf("%s/end\n", buf);
+    char buf[2000];
+    receiveHTTP(cliendSockfd, buf, 2000, 0);
+
 
     // Close the client socket
     close(cliendSockfd);
-    printf("Client socket closed.\n");
+    // printf("Client socket closed.\n");
 
-    // Close the server socket
+    // // Close the server socket
     close(sockfd);
-    printf("Server soket closed.\n");
+    // printf("Server soket closed.\n");
 
     return 0;
 }
