@@ -1,3 +1,7 @@
+/*
+a TCP socket client to test
+pre-http version of server.c
+*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

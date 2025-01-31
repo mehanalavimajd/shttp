@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
+#include "src/recieveHTTP.c"
 
 int main()
 {
@@ -32,20 +33,17 @@ int main()
     printf("Server listening on port 8080...\n");
 
     // Accept a new connection
-    struct sockaddr_in client_addr;
-    socklen_t client_addrlen = sizeof(client_addr);
-    int client_sockfd = accept(sockfd, (struct sockaddr *)&client_addr, &client_addrlen);
+    struct sockaddr_in clientAddr;
+    socklen_t clientAddrLen = sizeof(clientAddr);
+    int cliendSockfd = accept(sockfd, (struct sockaddr *)&clientAddr, &clientAddrLen);
     printf("Client connected!\n");
-    printf(client_addr.sin_addr.s_addr);
-
-    // Send data to the client
-    char buf[] = "hello tcp!";
-    send(client_sockfd, buf, sizeof(buf), 0);
-    printf("Message sent to client: %s\n", buf);
-
+    // Send data to the client;
+    char buf[10000] = {0};
+    receiveHTTP(cliendSockfd, buf, sizeof(buf), 0);
+    printf("%s/end\n", buf);
 
     // Close the client socket
-    close(client_sockfd);
+    close(cliendSockfd);
     printf("Client socket closed.\n");
 
     // Close the server socket
