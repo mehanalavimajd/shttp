@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
-#include "src/recieveHTTP.c"
+#include "src/receiveHTTP.c"
 
 int main()
 {
@@ -38,8 +38,8 @@ int main()
     int cliendSockfd = accept(sockfd, (struct sockaddr *)&clientAddr, &clientAddrLen);
     printf("Client connected!\n");
     // Send data to the client;
-    char buf[2000];
-    receiveHTTP(cliendSockfd, buf, 2000, 0);
+    char buf[4096];
+    receiveHTTP(cliendSockfd, buf, sizeof(buf), 0);
 
 
     // Close the client socket
