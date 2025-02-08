@@ -19,6 +19,7 @@ int main()
         close(sockfd);
         exit(EXIT_FAILURE);
     }
+    
     // Set up server address
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
@@ -38,8 +39,7 @@ int main()
     int cliendSockfd = accept(sockfd, (struct sockaddr *)&clientAddr, &clientAddrLen);
     printf("Client connected!\n");
     // Send data to the client;
-    char buf[4096];
-    receiveHTTP(cliendSockfd, buf, sizeof(buf), 0);
+    receiveHTTP(cliendSockfd, 0);
 
 
     // Close the client socket
