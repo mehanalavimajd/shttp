@@ -19,7 +19,7 @@ int main()
         close(sockfd);
         exit(EXIT_FAILURE);
     }
-    
+
     // Set up server address
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
@@ -34,21 +34,17 @@ int main()
     printf("Server listening on port 8080...\n");
 
     // Accept a new connection
-    struct sockaddr_in clientAddr;
-    socklen_t clientAddrLen = sizeof(clientAddr);
-    int cliendSockfd = accept(sockfd, (struct sockaddr *)&clientAddr, &clientAddrLen);
-    printf("Client connected!\n");
-    // Send data to the client;
-    receiveHTTP(cliendSockfd, 0);
-
-
-    // Close the client socket
-    close(cliendSockfd);
-    // printf("Client socket closed.\n");
-
-    // // Close the server socket
-    close(sockfd);
-    // printf("Server soket closed.\n");
-
+    while (1)
+    {
+        struct sockaddr_in clientAddr;
+        socklen_t clientAddrLen = sizeof(clientAddr);
+        int cliendSockfd = accept(sockfd, (struct sockaddr *)&clientAddr, &clientAddrLen);
+        printf("Client connected!\n");
+        // Send data to the client.
+        receiveHTTP(cliendSockfd, 0);
+        // Close the client socket.
+        close(cliendSockfd);
+        // printf("Client socket closed.\n");
+    }
     return 0;
 }
