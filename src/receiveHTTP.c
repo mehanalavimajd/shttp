@@ -48,9 +48,10 @@ void receiveHTTP(int clientSockfd, int flags)
         {
             printf("MAX_BUFFER_SIZE exceeded.");
         }
+        free(buff);
     }
     mainBuff[lastCharPos] = '\0';
-    printf("%s", mainBuff);
-    // prints everything ignoring line breaks...
-    // readFirstLine(buff, 100);
+    printf("%s",mainBuff);
+    char **s = readFirstLine(mainBuff, lastCharPos);
+    printf("%s\n",s[1]);
 }

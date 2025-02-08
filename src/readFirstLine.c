@@ -14,40 +14,46 @@ to find method, url, and HTTP version.
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include "utils/addChar.c"
-
-void readFirstLine(char *buff, int bufferSize)
+char **readFirstLine(char *buff, int bufferSize)
 {
-    char *firstLine = (char *) malloc(sizeof(char)*1024);
+    // Allocate memory for the first line
+    char *firstLine = (char *)malloc(sizeof(char) * 30000);
     int firstLineSize = 0;
     for (int i = 0; i < bufferSize; i++)
     {
-        if (buff[i]!='\r' && buff[i] != '\n')
+        if (buff[i] != '\n' && buff[i] != '\r')
         {
-            addChar(firstLine, buff[i]);
-            printf("%c",firstLine[i]);
-            firstLineSize++;
+            firstLine[i] = buff[i];
         }
         else
         {
             break;
         }
+        firstLineSize++;
     }
-    char props[3][100] = {};
-    int propNumber = 0;
-    int c = 0;
-    int l=0;
+    firstLine[firstLineSize] = '\0';
+    char **props = malloc(3 * sizeof(char *));
+    for (int i = 0; i < 3; i++)
+    {
+        props[i] = malloc(10000 * sizeof(char));
+    }
+    int propNum = 0;
+    int charNum = 0;
     for (int i = 0; i < firstLineSize; i++)
     {
         if (firstLine[i] == ' ')
         {
-            c++;
-            l=0;
+            props[propNum][charNum] = '\0';
+            propNum++;
+            charNum = 0;
         }
         else
         {
-            props[c][l] = firstLine[i];
-            l++;
+            props[propNum][charNum] = firstLine[i];
+            charNum++;
         }
     }
-     printf("\n %s | %s | %s \n",props[0], props[1], props[2]);
+    free(firstLine);
+    return props;
+    free(props);
 }
