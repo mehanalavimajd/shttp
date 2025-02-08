@@ -13,6 +13,7 @@ by using the recv function of the sockfd.
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include "readFirstLine.c"
+#include "response.c"
 #define BUFFER_SIZE 1024
 #define MAX_BUFFER_SIZE 1000000 // ~ 1MB
 
@@ -22,7 +23,7 @@ void receiveHTTP(int clientSockfd, int flags)
     int lastCharPos = 0;
     char *mainBuff = malloc(sizeof(char) * BUFFER_SIZE);
     // mainBuff has all the data
-    // buff gets it with BUFFER_SIZE  
+    // buff gets it with BUFFER_SIZE
     // and pours it into mainBuff.
     while (total < MAX_BUFFER_SIZE)
     {
@@ -44,6 +45,7 @@ void receiveHTTP(int clientSockfd, int flags)
         total += BUFFER_SIZE;
         char *tmp = realloc(mainBuff, total + (BUFFER_SIZE * sizeof(char)));
         mainBuff = tmp;
+        free(tmp);
         if (total > (MAX_BUFFER_SIZE - BUFFER_SIZE))
         {
             printf("MAX_BUFFER_SIZE exceeded.");
@@ -51,7 +53,12 @@ void receiveHTTP(int clientSockfd, int flags)
         free(buff);
     }
     mainBuff[lastCharPos] = '\0';
-    printf("%s",mainBuff);
-    char **s = readFirstLine(mainBuff, lastCharPos);
-    printf("%s\n",s[1]);
+    printf("%s", mainBuff);
+    char **props = readFirstLine(mainBuff, lastCharPos);
+    char *body = malloc(1000*sizeof(char));
+    strcpy(body, "hello web! \n");
+    strcat(body, props[1]);
+    response(clientSockfd, 200, "ok", body);
+    free(mainBuff);
+    free(body);
 }
